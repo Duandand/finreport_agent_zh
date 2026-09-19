@@ -112,8 +112,10 @@ ollama serve
 
 ### 3. 准备数据
 
+以寒武纪2026年中报为例，下载链接`https://static.cninfo.com.cn/finalpage/2026-08-08/1225464969.PDF`，下载完成后将pdf放入`data/pdfs`目录下：
+
 ```bash
-# 将财报 PDF 放入 data/pdfs/
+# 将财报 PDF 放入 data/pdfs/，更改prepare.py中文件目录
 python prepare.py     # 解析 PDF → chunks.jsonl + 表格 + FAISS 索引
 
 # 手动整理 metrics.csv（核心指标库）
