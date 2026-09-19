@@ -1,0 +1,10 @@
+__pycache__/
+*.egg-info
+demo*
+data/tables/*.csv
+data/chunks.jsonl
+finreport_venv/
+index/faiss.index
+.DS_Store
+.vscode/
+.idea/
