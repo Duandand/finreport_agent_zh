@@ -20,6 +20,64 @@ _chunks = [json.loads(l) for l in open("data/chunks.jsonl")]
 _metrics = pd.read_csv("data/metrics.csv")
 _metrics["period"] = _metrics["period"].astype(str)
 
+# 短词不要做子串替换（「收入」会误伤「营业收入」）
+_ALIAS_SUBSTRING_SKIP = {"收入"}
+
+METRIC_ALIAS = {
+    "营收": "营业收入",
+    "收入": "营业收入",
+    "净利润": "归母净利润",
+    "归母净利": "归母净利润",
+    "经营现金流": "经营活动现金流净额",
+    "现金流": "经营活动现金流净额",
+    "经营活动现金流": "经营活动现金流净额",
+    "经营活动产生的现金流量净额": "经营活动现金流净额",
+    "经营活动产生的现金流净额": "经营活动现金流净额",
+    "经营性现金流": "经营活动现金流净额",
+    "归母权益": "归母所有者权益",
+    "所有者权益": "归母所有者权益",
+    "总资产": "资产总计",
+    "总负债": "负债合计",
+    "负债率": "资产负债率",
+    "净利率": "净利率",
+    "毛利率": "毛利率",
+    "营收同比增速": "营业收入同比",
+    "营收同比": "营业收入同比",
+    "营业收入同比增速": "营业收入同比",
+    "净利润同比": "归母净利润同比",
+    "净利润同比增长": "归母净利润同比",
+    "归母净利润同比增长": "归母净利润同比",
+    "经营现金流同比": "经营现金流同比",
+    "经营现金流同比下降": "经营现金流同比",
+    "经营活动现金流净额同比": "经营现金流同比",
+}
+
+_YOY_CANONICAL = {
+    "经营活动现金流净额同比": "经营现金流同比",
+    "经营活动产生的现金流量净额同比": "经营现金流同比",
+}
+
+
+_CANONICAL_METRICS = set(METRIC_ALIAS.values()) | set(_YOY_CANONICAL.values())
+
+
+def _canonical_metric(metric: str) -> str:
+    m = str(metric).strip()
+    # 输入本身就是 canonical 名时，短路返回，避免子串替换把已存在的前缀再拼一次
+    if m in _CANONICAL_METRICS:
+        return m
+    if m in METRIC_ALIAS:
+        return METRIC_ALIAS[m]
+    for alias, canonical in sorted(METRIC_ALIAS.items(), key=lambda x: -len(x[0])):
+        if alias in _ALIAS_SUBSTRING_SKIP:
+            continue
+        if alias in m:
+            m = m.replace(alias, canonical)
+            break
+    m = re.sub(r"同比(增长|下降|增速|增长率|增幅|降幅)$", "同比", m)
+    return _YOY_CANONICAL.get(m, m)
+
+
 def search_text(query, top_k=3):
     vec = _model.encode(
         [query], return_dense=True, return_sparse=False, return_colbert_vecs=False,
@@ -36,22 +94,7 @@ def search_text(query, top_k=3):
 
 
 def search_table(query, top_k=5):
-    ALIAS = {
-        "营收": "营业收入",
-        "收入": "营业收入",
-        "净利润": "归母净利润",
-        "经营现金流": "经营活动现金流净额",
-        "现金流": "经营活动现金流净额",
-        "总资产": "资产总计",
-        "总负债": "负债合计",
-        "负债率": "资产负债率",
-        "净利率": "净利率",
-        "毛利率": "毛利率",
-    }
-    q = query
-    for a, b in ALIAS.items():
-        if a in q:
-            q = q.replace(a, b)
+    q = _canonical_metric(query)
 
     hits = []
     for _, row in _metrics.iterrows():
@@ -84,39 +127,25 @@ def read_table(table_id, rows=None, cols=None):
 
 
 def _normalize_period(p):
-    """把各种周期写法统一成 metrics.csv 里的格式：2026H1 / 2025H1"""
+    """统一成 metrics.csv 周期：2026H1 / 2025H1；全年/年报不成 H2。"""
     p = str(p).strip()
-    # 去掉“年”“报告期”“半年度”“半年报”“H1”等杂词
     m = re.match(r"(\d{4}).*?(H1|h1|半年|中期)", p)
     if m:
         return f"{m.group(1)}H1"
-    m = re.match(r"(\d{4}).*?(H2|h2|年度|年报|全年)", p)
+    m = re.match(r"(\d{4}).*?(H2|h2|下半年)", p)
     if m:
         return f"{m.group(1)}H2"
-    m = re.match(r"(\d{4})(H[12])", p, re.IGNORECASE)
+    m = re.match(r"(\d{4})(H[12])$", p, re.IGNORECASE)
     if m:
         return f"{m.group(1)}{m.group(2).upper()}"
+    m = re.match(r"(\d{4}).*?(全年|年报|年度|FY|fy)", p)
+    if m:
+        return f"{m.group(1)}FY"
     return p
 
 
 def query_metric(company, metric, period):
-    ALIAS = {
-        "营收": "营业收入",
-        "收入": "营业收入",
-        "净利润": "归母净利润",
-        "归母净利": "归母净利润",
-        "经营现金流": "经营活动现金流净额",
-        "现金流": "经营活动现金流净额",
-        "经营活动现金流": "经营活动现金流净额",
-        "经营活动产生的现金流量净额": "经营活动现金流净额",
-        "经营活动产生的现金流净额": "经营活动现金流净额",
-        "经营性现金流": "经营活动现金流净额",
-        "归母权益": "归母所有者权益",
-        "所有者权益": "归母所有者权益",
-        "总资产": "资产总计",
-        "总负债": "负债合计",
-    }
-    metric = ALIAS.get(metric, metric)
+    metric = _canonical_metric(metric)
     period = _normalize_period(period)
 
     df = _metrics[

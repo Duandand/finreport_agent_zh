@@ -146,8 +146,27 @@ A: 主要系本期对外采购及支付税金较上年同期增加所致。
 ### 5. 运行评测
 
 ```bash
-python eval.py
+python eval.py                          # 默认输出 eval_results.json
+python eval.py -o eval_results_p1.json  # 指定输出路径，便于版本对比
 ```
+
+### 6. 评测结果
+
+27 题评测集，总正确率 96.3%（26/27），平均步数 3.4。
+
+| category | pass/total | 准确率 |
+|---|---|---|
+| fact | 14/14 | 100.0% |
+| compute | 1/1 | 100.0% |
+| compare | 2/3 | 66.7% |
+| reasoning | 3/3 | 100.0% |
+| mixed | 1/1 | 100.0% |
+| reject | 5/5 | 100.0% |
+| **总计** | **26/27** | **96.3%** |
+
+剩余 1 题失败：`[compare]` 寒武纪2026H1经营现金流比2025H1少多少？——工具返回的指标名称不匹配，agent 走了拒答分支（下一轮待修）。
+
+详细结果见 `examples/eval_results_p1.json`。
 
 ---
 

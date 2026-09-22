@@ -116,7 +116,7 @@ def run_agent(question, max_step=8):
 | `strip_think` | 去掉 Qwen3.5 的 `<think>` 块 |
 | `parse_action` | 从任意文本里提取 JSON |
 | `seen_actions` | 防止同一工具同一参数重复调用 |
-| `search_fail_streak` | 连续 2 次 search 失败 → 强制 final |
+| `search_fail_streak` | 连续 2 次 search 失败 → 在 observation 里禁止再用 search_text |
 | 每轮重述原问题 | 防止模型被中间结果带偏 |
 | `max_step` | 硬性终止，避免死循环 |
 
@@ -129,15 +129,20 @@ def run_agent(question, max_step=8):
 3. **输出格式**：严格 JSON
 4. **硬性约束**：数字来源、引用、合规
 
-**LLM 接口**：通过 Ollama 的 `/api/chat` 调用，支持 `tools` 字段。
+**LLM 接口**：通过 Ollama 的 OpenAI 兼容接口 `/v1/chat/completions` 调用。当前从模型文本里解析 JSON action，未走原生 `tools` / function calling。
 
 ```python
-def call_llm(messages, tools=None):
+def call_llm(messages):
     resp = requests.post(
-        "http://127.0.0.1:11434/api/chat",
-        json={"model": "qwen3.5:9b-q4_K_M", "messages": messages, "stream": False}
+        "http://127.0.0.1:11434/v1/chat/completions",
+        json={
+            "model": "qwen3.5:9b-q4_K_M",
+            "messages": messages,
+            "stream": False,
+            "think": False,
+        },
     )
-    return resp.json()["message"]
+    return resp.json()["choices"][0]["message"]["content"]
 ```
 
 ### 3.3 工具层（`tools.py`）
@@ -336,7 +341,7 @@ reminder = (
 | 工具名拼错 | `TOOLS.get()` 返回 None | 返回 `available_tools` |
 | 指标未收录 | `query_metric` 返回 `error` | 返回 `available_metrics`，模型据此拒答 |
 | 重复动作 | `seen_actions` 命中 | 返回提示，要求换工具或 final |
-| 目标漂移 | search 连续失败 | `search_fail_streak >= 2` 强制 final |
+| 目标漂移 | search 连续失败 | `search_fail_streak >= 2` 警告并禁止再用 search_text |
 | 步数超限 | `step >= max_step` | 返回 fallback 答案 |
 
 ---
@@ -353,7 +358,7 @@ reminder = (
 ```
 
 ```python
-# tools.py 的 ALIAS
+# tools.py 的 METRIC_ALIAS
 "销售费用率": "销售费用率",
 "销售费用占比": "销售费用率",
 ```

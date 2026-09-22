@@ -1,0 +1,401 @@
+[
+  {
+    "id": "1",
+    "category": "fact",
+    "question": "寒武纪2026H1营业收入是多少？",
+    "expected": "59.96",
+    "answer": "寒武纪2026H1营业收入是59.96亿元。",
+    "citations": [
+      {
+        "page": 62,
+        "table_id": "合并利润表"
+      }
+    ],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "2",
+    "category": "fact",
+    "question": "寒武纪2026H1归母净利润是多少？",
+    "expected": "23.11",
+    "answer": "寒武纪 2026H1 归母净利润为 23.11 亿元。",
+    "citations": [
+      {
+        "page": 63,
+        "table_id": "合并利润表"
+      }
+    ],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "3",
+    "category": "fact",
+    "question": "寒武纪2026H1经营活动现金流净额是多少？",
+    "expected": "3.11",
+    "answer": "寒武纪2026H1经营活动现金流净额为3.11亿元。",
+    "citations": [
+      {
+        "page": 66,
+        "table_id": null
+      }
+    ],
+    "steps": 3,
+    "ok": true
+  },
+  {
+    "id": "4",
+    "category": "fact",
+    "question": "寒武纪2026H1资产总计是多少？",
+    "expected": "181.99",
+    "answer": "寒武纪2026H1资产总计为181.99亿元。",
+    "citations": [
+      {
+        "page": 58,
+        "table_id": null
+      }
+    ],
+    "steps": 3,
+    "ok": true
+  },
+  {
+    "id": "5",
+    "category": "fact",
+    "question": "寒武纪2026H1净利率是多少？",
+    "expected": "38.54",
+    "answer": "寒武纪2026H1净利率为38.54%（来源table_id:计算）",
+    "citations": [
+      {
+        "page": 62,
+        "table_id": null
+      }
+    ],
+    "steps": 3,
+    "ok": true
+  },
+  {
+    "id": "6",
+    "category": "fact",
+    "question": "寒武纪2026H1营收同比增速是多少？",
+    "expected": "108.13",
+    "answer": "寒武纪2026H1营收同比增速为108.13%。",
+    "citations": [
+      {
+        "page": 7,
+        "table_id": "主要会计数据"
+      }
+    ],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "7",
+    "category": "fact",
+    "question": "寒武纪2026H1资产负债率是多少？",
+    "expected": "25.48",
+    "answer": "寒武纪2026H1资产负债率为25.48%",
+    "citations": [
+      {
+        "page": 58,
+        "table_id": null
+      }
+    ],
+    "steps": 3,
+    "ok": true
+  },
+  {
+    "id": "8",
+    "category": "fact",
+    "question": "寒武纪2026H1归母净利润同比增长多少？",
+    "expected": "122.61",
+    "answer": "寒武纪 2026H1 归母净利润同比增长 122.61%。",
+    "citations": [
+      {
+        "page": 7,
+        "table_id": "主要会计数据"
+      }
+    ],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "9",
+    "category": "fact",
+    "question": "寒武纪2026H1经营现金流同比下降多少？",
+    "expected": "-65.83",
+    "answer": "寒武纪2026H1经营现金流同比下降了65.83%。",
+    "citations": [
+      {
+        "page": 7,
+        "table_id": null
+      }
+    ],
+    "steps": 4,
+    "ok": true
+  },
+  {
+    "id": "10",
+    "category": "compute",
+    "question": "寒武纪2026H1归母所有者权益占资产总计的比例？",
+    "expected": "74.48",
+    "answer": "2026H1归母所有者权益占资产总计的比例约为74.48%。",
+    "citations": [
+      {
+        "page": 59,
+        "table_id": "合并资产负债表"
+      },
+      {
+        "page": 58,
+        "table_id": "合并资产负债表"
+      }
+    ],
+    "steps": 5,
+    "ok": true
+  },
+  {
+    "id": "11",
+    "category": "compare",
+    "question": "寒武纪2026H1和2025H1营业收入差多少？",
+    "expected": "31.15",
+    "answer": "寒武纪2026H1营业收入比2025H1高出31.15亿元。",
+    "citations": [
+      {
+        "page": 62,
+        "table_id": null
+      }
+    ],
+    "steps": 8,
+    "ok": true
+  },
+  {
+    "id": "12",
+    "category": "compare",
+    "question": "寒武纪2026H1净利率比2025H1高多少？",
+    "expected": "2.50",
+    "answer": "寒武纪2026H1净利率为38.54%，2025H1为36.04%，2026H1比2025H1高2.5个百分点。",
+    "citations": [
+      {
+        "page": 62,
+        "table_id": "null"
+      }
+    ],
+    "steps": 5,
+    "ok": true
+  },
+  {
+    "id": "13",
+    "category": "compare",
+    "question": "寒武纪2026H1经营现金流比2025H1少多少？",
+    "expected": "6.00",
+    "answer": "抱歉，当前财报数据中未收录寒武纪2026H1和2025H1的经营活动现金流净额具体数值（工具返回指标名称不匹配或无数据），因此无法计算差额。",
+    "citations": [],
+    "steps": 6,
+    "ok": false
+  },
+  {
+    "id": "14",
+    "category": "reasoning",
+    "question": "寒武纪2026H1营收增长的主要原因是什么？",
+    "expected": "-",
+    "answer": "在《中科寒武纪科技股份有限公司2026年半年度报告》中未明确披露营业收入增长的主要原因。财报仅说明了营业成本变动系营业收入增长带动、财务费用变动系汇兑收益增加等具体项说明，但没有单独解释营收增长的驱动因素。",
+    "citations": [
+      {
+        "page": 8,
+        "table_id": null
+      },
+      {
+        "page": 13,
+        "table_id": null
+      },
+      {
+        "page": 22,
+        "table_id": null
+      }
+    ],
+    "steps": 4,
+    "ok": true
+  },
+  {
+    "id": "15",
+    "category": "reasoning",
+    "question": "寒武纪2026H1经营现金流为什么比2025H1下降？",
+    "expected": "-",
+    "answer": "寒武纪 2026H1 经营现金流净额较上期下降，主要系本期对外采购及支付税金较上年同期增加所致。",
+    "citations": [
+      {
+        "page": 22,
+        "table_id": null
+      }
+    ],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "16",
+    "category": "reasoning",
+    "question": "寒武纪2026H1营业收入为什么增长？",
+    "expected": "-",
+    "answer": "根据现有财报资料片段，暂未收录寒武纪 2026H1 营业收入增长的具体变动原因说明。文中主要提及了行业智能化升级及客户资源等背景优势，以及营业成本、费用等的变动原因，但关于营业收入本身的直接增长解释未在搜索结果中明确呈现。",
+    "citations": [
+      {
+        "page": 22,
+        "table_id": null
+      },
+      {
+        "page": 8,
+        "table_id": null
+      }
+    ],
+    "steps": 3,
+    "ok": true
+  },
+  {
+    "id": "17",
+    "category": "fact",
+    "question": "寒武纪2026H1毛利率是多少？",
+    "expected": "55.25",
+    "answer": "寒武纪2026H1毛利率为55.25%",
+    "citations": [
+      {
+        "page": 62,
+        "table_id": "计算"
+      }
+    ],
+    "steps": 3,
+    "ok": true
+  },
+  {
+    "id": "18",
+    "category": "fact",
+    "question": "寒武纪2026H1营收是多少？",
+    "expected": "59.96",
+    "answer": "寒武纪2026H1营业收入为59.96亿元。",
+    "citations": [
+      {
+        "page": 62,
+        "table_id": null
+      }
+    ],
+    "steps": 3,
+    "ok": true
+  },
+  {
+    "id": "19",
+    "category": "fact",
+    "question": "寒武纪2026H1净利润是多少？",
+    "expected": "23.11",
+    "answer": "寒武纪2026H1归母净利润为23.11亿元",
+    "citations": [
+      {
+        "page": 63,
+        "table_id": "合并利润表"
+      }
+    ],
+    "steps": 3,
+    "ok": true
+  },
+  {
+    "id": "20",
+    "category": "fact",
+    "question": "寒武纪2026H1总资产是多少？",
+    "expected": "181.99",
+    "answer": "寒武纪 2026H1 资产总计为 181.99 亿元。",
+    "citations": [
+      {
+        "page": 58,
+        "table_id": null
+      }
+    ],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "21",
+    "category": "fact",
+    "question": "寒武纪2026年半年报营业收入是多少？",
+    "expected": "59.96",
+    "answer": "寒武纪2026年半年报营业收入为59.96亿元。",
+    "citations": [
+      {
+        "page": 62,
+        "table_id": "合并利润表"
+      }
+    ],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "22",
+    "category": "mixed",
+    "question": "寒武纪2026H1经营现金流比2025H1少多少？为什么？",
+    "expected": "6.00",
+    "answer": "寒武纪2026H1经营现金流净额3.11亿元，比2025H1的9.11亿元少6.0亿元。主要系本期对外采购及支付税金较上年同期增加所致。",
+    "citations": [
+      {
+        "page": 66,
+        "table_id": "合并现金流量表"
+      },
+      {
+        "page": 66,
+        "table_id": "合并现金流量表"
+      },
+      {
+        "page": 22,
+        "table_id": null
+      }
+    ],
+    "steps": 8,
+    "ok": true
+  },
+  {
+    "id": "23",
+    "category": "reject",
+    "question": "寒武纪2026H1每股收益是多少？",
+    "expected": "-",
+    "answer": "寒武纪2026H1的“每股收益”指标未找到（未收录），无法回答。",
+    "citations": [],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "24",
+    "category": "reject",
+    "question": "寒武纪2025年全年营业收入是多少？",
+    "expected": "-",
+    "answer": "抱歉，财报数据库中暂未收录寒武纪2025年的营业收入数据或相关同比指标，因此无法查询该数值。",
+    "citations": [],
+    "steps": 4,
+    "ok": true
+  },
+  {
+    "id": "25",
+    "category": "reject",
+    "question": "寒武纪2026H1ROE是多少？",
+    "expected": "-",
+    "answer": "寒武纪2026H1的 ROE 指标未收录，无法直接提供该数值。可查询的财务指标包括营业收入、归母净利润等。",
+    "citations": [],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "26",
+    "category": "reject",
+    "question": "寒武纪明年股价会涨吗？",
+    "expected": "-",
+    "answer": "无法回答。作为财报分析助手，我只能提供历史财务数据及相关分析，无法预测或评论股票未来价格走势。股价受市场、政策、宏观经济等多重因素影响，建议咨询专业投资顾问并参考权威渠道的市场信息。",
+    "citations": [],
+    "steps": 2,
+    "ok": true
+  },
+  {
+    "id": "27",
+    "category": "reject",
+    "question": "寒武纪2026H1流动比率是多少？",
+    "expected": "-",
+    "answer": "寒武纪2026H1流动比率未收录在财报数据中，无法回答。",
+    "citations": [],
+    "steps": 4,
+    "ok": true
+  }
+]

@@ -6,23 +6,46 @@ from agent import run_agent
 
 REJECT_KEYWORDS = [
     "未收录", "未找到", "无法回答", "无数据", "不提供", "不做投资建议",
-    "没有收录", "无法预测", "无法提供", "未在", "没有相关", "请谨慎",
-    "抱歉"
+    "没有收录", "无法预测", "无法准确预测", "不能预测", "无法提供", "未在",
+    "没有相关", "请谨慎", "抱歉",
 ]
+
+ABS_TOL = 0.05
+REL_TOL = 0.002
 
 def is_reject_answer(answer: str) -> bool:
     # 任意一个关键词命中即算拒答
     return any(k in answer for k in REJECT_KEYWORDS)
 
+def _to_float(value: str):
+    try:
+        return float(str(value).replace(",", "").replace("%", "").strip())
+    except (TypeError, ValueError):
+        return None
+
+
 def check_number_in_answer(value: str, answer: str) -> bool:
-    # todo: 空值或 "-" 也算正确吗？目前算正确
     if not value or value == "-":
         return True
-    pattern = r"(?<![\d.])" + re.escape(value) + r"(?![\d.])"
-    return bool(re.search(pattern, answer))
+    expected = _to_float(value)
+    if expected is None:
+        pattern = r"(?<![\d.])" + re.escape(value) + r"(?![\d.])"
+        return bool(re.search(pattern, answer))
+
+    candidates = [_to_float(n) for n in re.findall(r"-?\d+(?:\.\d+)?", answer)]
+    candidates = [n for n in candidates if n is not None]
+    for got in candidates:
+        if abs(got - expected) <= ABS_TOL:
+            return True
+        if expected != 0 and abs(got - expected) / abs(expected) <= REL_TOL:
+            return True
+        # 「同比下降 65.83%」常不带负号
+        if expected < 0 and abs(abs(got) - abs(expected)) <= ABS_TOL:
+            return True
+    return False
 
 
-def evaluate(csv_path="testset.csv"):
+def evaluate(csv_path="testset.csv", output_path="eval_results.json"):
     results = []
     with open(csv_path, encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -81,12 +104,17 @@ def evaluate(csv_path="testset.csv"):
     print(f"平均步数: {avg_steps:.1f}")
 
     # 保存
-    with open("eval_results.json", "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
-    print(f"结果已保存到 eval_results.json")
+    print(f"结果已保存到 {output_path}")
 
     return results
 
 
 if __name__ == "__main__":
-    evaluate()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--output", default="eval_results.json")
+    parser.add_argument("--csv", default="testset.csv")
+    args = parser.parse_args()
+    evaluate(csv_path=args.csv, output_path=args.output)
